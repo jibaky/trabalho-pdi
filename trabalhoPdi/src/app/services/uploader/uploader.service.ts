@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Imagem, Pixel } from 'src/app/models/imagem.model';
-import { resolve } from 'url';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +32,6 @@ export class UploaderService {
         }
         if(this.pic.tipo == 'P2') this.pic.pixels = this.loadPGM(arrDados, inicioPixels);
         if(this.pic.tipo == 'P3') this.pic.pixels = this.loadPPM(arrDados, inicioPixels);
-        console.log('resultado', this.pic);
         resolve(true);
       };
       leitor.readAsText(arquivo);
@@ -43,16 +41,55 @@ export class UploaderService {
   private loadPGM(dados: Array<String>, offset: number): Pixel[]{
     const pixels=[];
     for(let i = offset; i<dados.length; i++){
-      pixels.push(new Pixel(Number(dados[i])));
+      if(dados[i]!=="")pixels.push(new Pixel(Number(dados[i])));
     }
     return pixels;
   }
   private loadPPM(dados: Array<String>, offset: number): Pixel[]{
     const pixels=[];
     for(let i = offset; i<dados.length; i=i+3){
-      pixels.push(new Pixel(Number(dados[i]), Number(dados[i+1]), Number(dados[i+2])));
+      if(dados[i]!=="")pixels.push(new Pixel(Number(dados[i]), Number(dados[i+1]), Number(dados[i+2])));
     }
     return pixels;
+  }
+  getHistograma(){
+    let freq = {};
+    for(let i=0; i <this.pic.pixels.length; i++){
+      if(freq[this.pic.pixels[i].r]===undefined){
+        freq[this.pic.pixels[i].r]=1;
+      } else freq[this.pic.pixels[i].r] = freq[this.pic.pixels[i].r]+1;
+    }
+    return freq;
+  }
+  getFreqAcc(freq){
+    let tam = Object.keys(freq);
+    let fAcc = {};
+    for(let i=0; i<tam.length; i++){
+      if(i==0) fAcc[tam[i]] = freq[tam[i]];
+      else fAcc[tam[i]] = freq[tam[i]] + fAcc[tam[i-1]];
+    }
+    return fAcc;
+  }
+  eqFreq(){
+    if(this.pic.tipo == 'P3') return;
+    let freq = this.getHistograma();
+    let fAcc = this.getFreqAcc(freq);
+    let tam = Object.keys(freq);
+    let nCinza = this.pic.valMax, nCol = this.pic.largura, nLin = this.pic.altura;
+    let fEq = {};
+    for(let i=0; i<tam.length; i++) fEq[tam[i]] = Math.max(0,Math.round((nCinza*fAcc[tam[i]])/(nCol*nLin))-1);
+    return fEq;
+  }
+  equalizarHistograma(fEq): Promise<boolean>{
+    return new Promise((resolve, reject)=>{
+      if(this.pic.tipo == 'P3') return console.log("Essa feature so foi implementada para imagens .pgm");
+      for(let i=0; i<this.pic.pixels.length; i++){
+        this.pic.pixels[i].r = fEq[this.pic.pixels[i].r];
+        this.pic.pixels[i].g = fEq[this.pic.pixels[i].g];
+        this.pic.pixels[i].b = fEq[this.pic.pixels[i].b];
+      }
+      resolve(true);
+    });
   }
   negativo(): Promise<boolean>{
     return new Promise((resolve, reject)=>{
@@ -63,7 +100,6 @@ export class UploaderService {
         this.pic.pixels[i].b = this.pic.valMax-this.pic.pixels[i].b;
       }
       resolve(true);
-    })
+    });
   }
-  
 }

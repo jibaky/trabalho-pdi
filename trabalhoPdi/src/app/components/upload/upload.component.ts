@@ -42,6 +42,14 @@ export class UploadComponent implements OnInit {
       this.drawOnCanvas(this.servico.pic);
     });
   }
+  eqFreq(){
+    let fEq = this.servico.eqFreq();
+  }
+  equalizarHistograma(){
+    this.servico.equalizarHistograma(this.servico.eqFreq()).then((resultado)=>{
+      this.drawOnCanvas(this.servico.pic);
+    });
+  }
   getMousePosition(event){
     const ctx = this.myCanvas.nativeElement.getContext('2d');
     let rect = this.myCanvas.nativeElement.getBoundingClientRect();

@@ -1,6 +1,7 @@
 <input type='file' class='fileInput' name='file' (change)='onChange(fileInput.files[0])' #fileInput>
 <canvas id='draw' #draw width='150' class='aspero'></canvas><br>
-<button color='primary' mat-raised-button (click) = 'negativo()' style="margin:10px">inverter</button>
+<button color='primary' mat-raised-button (click) = 'negativo()' style="margin:10px">inverter cores</button>
+<button color='primary' mat-raised-button (click) = 'equalizarHistograma()' style="margin:10px">equalização de histograma</button>
 <table>
     <tr>
         <th>RGB</th>
