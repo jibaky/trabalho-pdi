@@ -13,7 +13,7 @@ import {MatButtonModule} from '@angular/material/button';
   declarations: [
     AppComponent,
     HomeComponent,
-    UploadComponent
+    UploadComponent,
   ],
   imports: [
     BrowserModule,

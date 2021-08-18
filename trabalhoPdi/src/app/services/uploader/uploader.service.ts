@@ -65,4 +65,5 @@ export class UploaderService {
       resolve(true);
     })
   }
+  
 }

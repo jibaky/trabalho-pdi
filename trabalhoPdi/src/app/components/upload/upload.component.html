@@ -1,3 +1,21 @@
 <input type='file' class='fileInput' name='file' (change)='onChange(fileInput.files[0])' #fileInput>
-<canvas id='draw' #draw width='150' class='aspero'></canvas>
-<button color='primary' mat-raised-button (click) = 'negativo()'>inverter</button>
+<canvas id='draw' #draw width='150' class='aspero'></canvas><br>
+<button color='primary' mat-raised-button (click) = 'negativo()' style="margin:10px">inverter</button>
+<table>
+    <tr>
+        <th>RGB</th>
+        <th>HSL</th>
+    </tr>
+    <tr>
+        <td><input id="R" size="1" [(value)]="textoR"></td>
+        <td><input id="H" size="1" [(value)]="textoH"></td>
+    </tr>
+    <tr>
+        <td><input id="G" size="1" [(value)]="textoG"></td>
+        <td><input id="S" size="1" [(value)]="textoS"></td>
+    </tr>
+    <tr>
+        <td><input id="B" size="1" [(value)]="textoB"></td>
+        <td><input id="L" size="1" [(value)]="textoL"></td>
+    </tr>
+</table>
