@@ -5,8 +5,8 @@ export class Pixel{
 
     constructor(r = 0, g = null, b = null){
         this.r = r;
-        this.g = g || r;
-        this.b = b || r;
+        this.g = g === null ? r : g;
+        this.b = b === null ? r : b;
     }
 }
 

@@ -32,6 +32,7 @@ export class UploaderService {
           this.pic.valMax = Number(arrDados[2]);
         }
         if(this.pic.tipo == 'P2') this.pic.pixels = this.loadPGM(arrDados, inicioPixels);
+        if(this.pic.tipo == 'P3') this.pic.pixels = this.loadPPM(arrDados, inicioPixels);
         console.log('resultado', this.pic);
         resolve(true);
       };
@@ -43,6 +44,13 @@ export class UploaderService {
     const pixels=[];
     for(let i = offset; i<dados.length; i++){
       pixels.push(new Pixel(Number(dados[i])));
+    }
+    return pixels;
+  }
+  private loadPPM(dados: Array<String>, offset: number): Pixel[]{
+    const pixels=[];
+    for(let i = offset; i<dados.length; i=i+3){
+      pixels.push(new Pixel(Number(dados[i]), Number(dados[i+1]), Number(dados[i+2])));
     }
     return pixels;
   }
