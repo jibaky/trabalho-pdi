@@ -55,6 +55,11 @@ export class UploadComponent implements OnInit {
       this.drawOnCanvas(this.servico.pic);
     });
   }
+  lowPass(){
+    this.servico.lowPass().then((resultado)=>{
+      this.drawOnCanvas(this.servico.pic);
+    })
+  }
   getMousePosition(event){
     const ctx = this.myCanvas.nativeElement.getContext('2d');
     let rect = this.myCanvas.nativeElement.getBoundingClientRect();
