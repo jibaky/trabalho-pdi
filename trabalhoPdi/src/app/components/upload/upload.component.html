@@ -1,7 +1,23 @@
 <input type='file' class='fileInput' name='file' (change)='onChange(fileInput.files[0])' #fileInput>
 <canvas id='draw' #draw width='150' class='aspero'></canvas><br>
-<button color='primary' mat-raised-button (click) = 'negativo()' style="margin:10px">inverter cores</button>
-<button color='primary' mat-raised-button (click) = 'equalizarHistograma()' style="margin:10px">equalização de histograma</button>
+<table>
+    <tr>
+        <td><button color='primary' mat-raised-button (click) = 'negativo()' style="margin:10px">inverter cores</button></td>
+        <td><button color='primary' mat-raised-button (click) = 'equalizarHistograma()' style="margin:10px">equalização de histograma</button></td>
+    </tr>
+    <tr>
+        <td><button color='primary' mat-raised-button (click) = 'saltPepper(5)' style="margin:10px">ruido sal e pimenta - 05%</button></td>
+        <td><button color='primary' mat-raised-button (click) = 'saltPepper(10)' style="margin:10px">ruido sal e pimenta - 10%</button></td>
+    </tr>
+    <tr>
+        <td><button color='primary' mat-raised-button (click) = 'saltPepper(20)' style="margin:10px">ruido sal e pimenta - 20%</button></td>
+        <td><button color='primary' mat-raised-button (click) = 'saltPepper(40)' style="margin:10px">ruido sal e pimenta - 40%</button></td>
+    </tr>
+    <tr>
+        <td><button color='primary' mat-raised-button (click) = 'saltPepper(60)' style="margin:10px">ruido sal e pimenta - 60%</button></td>
+        <td><button color='primary' mat-raised-button (click) = 'saltPepper(80)' style="margin:10px">ruido sal e pimenta - 80%</button></td>
+    </tr>
+</table>
 <table>
     <tr>
         <th>RGB</th>

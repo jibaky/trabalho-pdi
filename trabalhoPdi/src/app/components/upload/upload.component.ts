@@ -28,7 +28,7 @@ export class UploadComponent implements OnInit {
   }
 
   drawOnCanvas(pic: Imagem){
-    console.log(this.myCanvas);
+    //console.log(this.myCanvas);
     const context = this.myCanvas.nativeElement.getContext('2d');
     this.myCanvas.nativeElement.width = pic.largura;
     this.myCanvas.nativeElement.height = pic.altura;
@@ -50,13 +50,18 @@ export class UploadComponent implements OnInit {
       this.drawOnCanvas(this.servico.pic);
     });
   }
+  saltPepper(qtd){
+    this.servico.saltPepper(qtd/100).then((resultado)=>{
+      this.drawOnCanvas(this.servico.pic);
+    });
+  }
   getMousePosition(event){
     const ctx = this.myCanvas.nativeElement.getContext('2d');
     let rect = this.myCanvas.nativeElement.getBoundingClientRect();
     let x = event.clientX - rect.left;
     let y = event.clientY - rect.top;
     var ImageData = ctx.getImageData(x, y, 1, 1);
-    console.log(ImageData);
+    //console.log(ImageData);
     var hsl = this.RGBtoHSL(ImageData.data[0], ImageData.data[1], ImageData.data[2]);
     this.textoR = ImageData.data[0];
     this.textoG = ImageData.data[1];

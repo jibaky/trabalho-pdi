@@ -32,6 +32,7 @@ export class UploaderService {
         }
         if(this.pic.tipo == 'P2') this.pic.pixels = this.loadPGM(arrDados, inicioPixels);
         if(this.pic.tipo == 'P3') this.pic.pixels = this.loadPPM(arrDados, inicioPixels);
+        //console.log(this.pic.pixels);
         resolve(true);
       };
       leitor.readAsText(arquivo);
@@ -88,6 +89,24 @@ export class UploaderService {
         this.pic.pixels[i].g = fEq[this.pic.pixels[i].g];
         this.pic.pixels[i].b = fEq[this.pic.pixels[i].b];
       }
+      //console.log(this.pic.pixels);
+      resolve(true);
+    });
+  }
+  saltPepper(qtd): Promise<boolean>{
+    return new Promise((resolve, reject)=>{
+      qtd = Math.round(qtd*this.pic.pixels.length);
+      for(let i=0; i<qtd; i++){
+        let x = Math.floor(Math.random()*(this.pic.largura - 0)+0);
+        let y = Math.floor(Math.random()*(this.pic.altura - 0)+0);
+        let cor = Math.round(Math.random());
+        if (cor == 1) cor = 255;
+        let index = y*this.pic.largura+x;
+        //console.log(x,y,this.pic.largura,index, this.pic.pixels[index]);
+        this.pic.pixels[index].r = cor;
+        this.pic.pixels[index].g = cor;
+        this.pic.pixels[index].b = cor;
+      }
       resolve(true);
     });
   }
@@ -99,6 +118,7 @@ export class UploaderService {
         this.pic.pixels[i].g = this.pic.valMax-this.pic.pixels[i].g;
         this.pic.pixels[i].b = this.pic.valMax-this.pic.pixels[i].b;
       }
+      //console.log(this.pic.pixels);
       resolve(true);
     });
   }
