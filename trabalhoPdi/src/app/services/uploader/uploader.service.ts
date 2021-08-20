@@ -250,6 +250,7 @@ export class UploaderService {
           }
           let value=0;
           for(let aux = 0; aux<9; aux++) value+=mask[aux];
+          //console.log(index, value, fator, value/fator);
           this.pic.pixels[index].r = Math.round(value/fator);
           this.pic.pixels[index].g = Math.round(value/fator);
           this.pic.pixels[index].b = Math.round(value/fator);
@@ -386,7 +387,8 @@ export class UploaderService {
           }
           let value=0;
           for(let aux = 0; aux<9; aux++) value+=mask[aux];
-          //console.log(index, Math.round(value/fator));
+          if(value<0) value = 0;
+          //console.log(index, value, fator, value/fator);
           this.pic.pixels[index].r = Math.round(value/fator);
           this.pic.pixels[index].g = Math.round(value/fator);
           this.pic.pixels[index].b = Math.round(value/fator);
