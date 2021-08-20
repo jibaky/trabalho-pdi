@@ -83,7 +83,7 @@ export class UploaderService {
   }
   equalizarHistograma(fEq): Promise<boolean>{
     return new Promise((resolve, reject)=>{
-      if(this.pic.tipo == 'P3') return console.log("Essa feature so foi implementada para imagens .pgm");
+      if(this.pic.tipo == 'P3') return alert("Essa feature so foi implementada para imagens .pgm");
       for(let i=0; i<this.pic.pixels.length; i++){
         this.pic.pixels[i].r = fEq[this.pic.pixels[i].r];
         this.pic.pixels[i].g = fEq[this.pic.pixels[i].g];
@@ -124,8 +124,8 @@ export class UploaderService {
   }
   lowPass(): Promise<boolean>{
     return new Promise((resolve, reject)=>{
-      if(this.pic.tipo == 'P3') return console.log("Essa feature so foi implementada para imagens .pgm");
-      let mask = [1,1,1,1,1,1,1,1,1];
+      if(this.pic.tipo == 'P3') return alert("Essa feature so foi implementada para imagens .pgm");
+      let mask = [0,0,0,0,0,0,0,0,0];
       let fator = 9, largura = this.pic.largura, altura = this.pic.altura;
       for(let i=0; i<altura; i++){
         for(let j=0; j<largura; j++){
@@ -250,6 +250,143 @@ export class UploaderService {
           }
           let value=0;
           for(let aux = 0; aux<9; aux++) value+=mask[aux];
+          this.pic.pixels[index].r = Math.round(value/fator);
+          this.pic.pixels[index].g = Math.round(value/fator);
+          this.pic.pixels[index].b = Math.round(value/fator);
+        }
+      }
+      resolve(true);
+    });
+  }
+  highPass(): Promise<boolean>{
+    return new Promise((resolve, reject)=>{
+      if(this.pic.tipo == 'P3') return alert("Essa feature so foi implementada para imagens .pgm");
+      let mask = [0,0,0,0,0,0,0,0,0];
+      let fator = 9, largura = this.pic.largura, altura = this.pic.altura;
+      for(let i=0; i<altura; i++){
+        for(let j=0; j<largura; j++){
+          let index = i*largura+j;
+          //console.log(index);
+          if(index == 0){//canto superior esquerdo
+            //console.log('teste1', 'index='+index, 'i='+i, 'j='+j, 'largura='+largura, '='+0);
+            mask[0] = -1 * this.pic.pixels[index].r;
+            mask[1] = -1 * this.pic.pixels[index].r;
+            mask[2] = -1 * this.pic.pixels[index+1].r;
+            mask[3] = -1 * this.pic.pixels[index].r;
+            mask[4] =  8 * this.pic.pixels[index].r;
+            mask[5] = -1 * this.pic.pixels[index+1].r;
+            mask[6] = -1 * this.pic.pixels[(i+1)*largura+(j)].r;
+            mask[7] = -1 * this.pic.pixels[(i+1)*largura+(j)].r;
+            mask[8] = -1 * this.pic.pixels[(i+1)*largura+(j+1)].r;
+            //console.log('teste1F');
+          }
+          else if(index == largura-1){//canto superior direito
+            //console.log('teste2','index='+index, 'i='+i, 'j='+j, 'largura='+largura, '='+(largura-1));
+            mask[0] = -1 * this.pic.pixels[index-1].r
+            mask[1] = -1 * this.pic.pixels[index].r;
+            mask[2] = -1 * this.pic.pixels[index].r;
+            mask[3] = -1 * this.pic.pixels[index-1].r;
+            mask[4] =  8 * this.pic.pixels[index].r;
+            mask[5] = -1 * this.pic.pixels[index].r;
+            mask[6] = -1 * this.pic.pixels[(i+1)*largura+(j-1)].r;
+            mask[7] = -1 * this.pic.pixels[(i+1)*largura+(j)].r;
+            mask[8] = -1 * this.pic.pixels[(i+1)*largura+(j)].r;
+            //console.log('teste2F');
+          }
+          else if(index == (altura-1)*largura){//canto inferior esquerdo
+            //console.log('teste3', 'index='+index, 'i='+i, 'j='+j, 'largura='+largura, '='+(altura-1)*largura);
+            mask[0] = -1 * this.pic.pixels[(i-1)*largura+(j)].r
+            mask[1] = -1 * this.pic.pixels[(i-1)*largura+(j)].r;
+            mask[2] = -1 * this.pic.pixels[(i-1)*largura+(j+1)].r;
+            mask[3] = -1 * this.pic.pixels[index].r;
+            mask[4] =  8 * this.pic.pixels[index].r;
+            mask[5] = -1 * this.pic.pixels[index+1].r;
+            mask[6] = -1 * this.pic.pixels[index].r;
+            mask[7] = -1 * this.pic.pixels[index].r;
+            mask[8] = -1 * this.pic.pixels[index+1].r;
+            //console.log('teste3F');
+          }
+          else if(index == altura*largura-1){//canto inferior direito
+            //console.log('teste4', 'index='+index, 'i='+i, 'j='+j, 'largura='+largura, '='+(altura*largura-1));
+            mask[0] = -1 * this.pic.pixels[(i-1)*largura+(j-1)].r
+            mask[1] = -1 * this.pic.pixels[(i-1)*largura+(j)].r;
+            mask[2] = -1 * this.pic.pixels[(i-1)*largura+(j)].r;
+            mask[3] = -1 * this.pic.pixels[index-1].r;
+            mask[4] =  8 * this.pic.pixels[index].r;
+            mask[5] = -1 * this.pic.pixels[index].r;
+            mask[6] = -1 * this.pic.pixels[index-1].r;
+            mask[7] = -1 * this.pic.pixels[index].r;
+            mask[8] = -1 * this.pic.pixels[index].r;
+            //console.log('teste4F');
+          }
+          else if(index == i*largura){//borda esquerda
+            //console.log('teste5', 'index='+index, 'i='+i, 'j='+j, 'largura='+largura, '='+(i*largura));
+            mask[0] = -1 * this.pic.pixels[(i-1)*largura+(j)].r
+            mask[1] = -1 * this.pic.pixels[(i-1)*largura+(j)].r;
+            mask[2] = -1 * this.pic.pixels[(i-1)*largura+(j+1)].r;
+            mask[3] = -1 * this.pic.pixels[index].r;
+            mask[4] =  8 * this.pic.pixels[index].r;
+            mask[5] = -1 * this.pic.pixels[index+1].r;
+            mask[6] = -1 * this.pic.pixels[(i+1)*largura+(j)].r;
+            mask[7] = -1 * this.pic.pixels[(i+1)*largura+(j)].r;
+            mask[8] = -1 * this.pic.pixels[(i+1)*largura+(j+1)].r;
+            //console.log('teste5F');
+          }
+          else if(index == (i+1)*largura-1){//borda direita
+            //console.log('teste6', 'index='+index, 'i='+i, 'j='+j, 'largura='+largura, '='+((i+1)*largura-1));
+            mask[0] = -1 * this.pic.pixels[(i-1)*largura+(j-1)].r
+            mask[1] = -1 * this.pic.pixels[(i-1)*largura+(j)].r;
+            mask[2] = -1 * this.pic.pixels[(i-1)*largura+(j)].r;
+            mask[3] = -1 * this.pic.pixels[index-1].r;
+            mask[4] =  8 * this.pic.pixels[index].r;
+            mask[5] = -1 * this.pic.pixels[index].r;
+            mask[6] = -1 * this.pic.pixels[(i+1)*largura+(j-1)].r;
+            mask[7] = -1 * this.pic.pixels[(i+1)*largura+(j)].r;
+            mask[8] = -1 * this.pic.pixels[(i+1)*largura+(j)].r;
+            //console.log('teste6F');
+          }
+          else if(index < largura){//borda cima
+            //console.log('teste7', 'index='+index, 'i='+i, 'j='+j, 'largura='+largura, '<'+largura);
+            mask[0] = -1 * this.pic.pixels[index-1].r
+            mask[1] = -1 * this.pic.pixels[index].r;
+            mask[2] = -1 * this.pic.pixels[index+1].r;
+            mask[3] = -1 * this.pic.pixels[index-1].r;
+            mask[4] =  8 * this.pic.pixels[index].r;
+            mask[5] = -1 * this.pic.pixels[index+1].r;
+            mask[6] = -1 * this.pic.pixels[(i+1)*largura+(j-1)].r;
+            mask[7] = -1 * this.pic.pixels[(i+1)*largura+(j)].r;
+            mask[8] = -1 * this.pic.pixels[(i+1)*largura+(j+1)].r;
+            //console.log('teste7F');
+          }
+          else if(index > (altura-1)*largura){//borda baixo
+            //console.log('teste8', 'index='+index, 'i='+i, 'j='+j, 'largura='+largura, '>'+(altura-1)*largura);
+            mask[0] = -1 * this.pic.pixels[(i-1)*largura+(j-1)].r
+            mask[1] = -1 * this.pic.pixels[(i-1)*largura+j].r;
+            mask[2] = -1 * this.pic.pixels[(i-1)*largura+(j+1)].r;
+            mask[3] = -1 * this.pic.pixels[index-1].r;
+            mask[4] =  8 * this.pic.pixels[index].r;
+            mask[5] = -1 * this.pic.pixels[index+1].r;
+            mask[6] = -1 * this.pic.pixels[index-1].r;
+            mask[7] = -1 * this.pic.pixels[index].r;
+            mask[8] = -1 * this.pic.pixels[index+1].r;
+            //console.log('teste8F');
+          }
+          else{
+            //console.log('teste9', 'index='+index, 'i='+i, 'j='+j, 'largura='+largura);
+            mask[0] = -1 * this.pic.pixels[(i-1)*largura+(j-1)].r
+            mask[1] = -1 * this.pic.pixels[(i-1)*largura+(j)].r;
+            mask[2] = -1 * this.pic.pixels[(i-1)*largura+(j+1)].r;
+            mask[3] = -1 * this.pic.pixels[index-1].r;
+            mask[4] =  8 * this.pic.pixels[index].r;
+            mask[5] = -1 * this.pic.pixels[index+1].r;
+            mask[6] = -1 * this.pic.pixels[(i+1)*largura+(j-1)].r;
+            mask[7] = -1 * this.pic.pixels[(i+1)*largura+(j)].r;
+            mask[8] = -1 * this.pic.pixels[(i+1)*largura+(j+1)].r;
+            //console.log('teste9F');
+          }
+          let value=0;
+          for(let aux = 0; aux<9; aux++) value+=mask[aux];
+          //console.log(index, Math.round(value/fator));
           this.pic.pixels[index].r = Math.round(value/fator);
           this.pic.pixels[index].g = Math.round(value/fator);
           this.pic.pixels[index].b = Math.round(value/fator);

@@ -1,41 +1,118 @@
-<input type='file' class='fileInput' name='file' (change)='onChange(fileInput.files[0])' #fileInput>
-<canvas id='draw' #draw width='150' class='aspero'></canvas><br>
 <table>
     <tr>
-        <td><button color='primary' mat-raised-button (click) = 'negativo()' style="margin:10px">inverter cores</button></td>
-        <td><button color='primary' mat-raised-button (click) = 'equalizarHistograma()' style="margin:10px">equalização de histograma</button></td>
+        <th>
+            <canvas id='draw' #draw width='150' class='aspero'></canvas><br>
+            <input type='file' class='fileInput' name='file' (change)='onChange(fileInput.files[0])' #fileInput>
+        </th>
+        <th>
+            <div class="numeros">
+                <table>
+                    <tr>
+                        <th>RGB</th>
+                        <th>HSL</th>
+                        <th>COORDENADAS</th>
+                    </tr>
+                    <tr>
+                        <td><input id="R" size="1" [(value)]="textoR"></td>
+                        <td><input id="H" size="1" [(value)]="textoH"></td>
+                        <td><input id="X" size="5" [(value)]="textoX"></td>
+                    </tr>
+                    <tr>
+                        <td><input id="G" size="1" [(value)]="textoG"></td>
+                        <td><input id="S" size="1" [(value)]="textoS"></td>
+                        <td><input id="Y" size="5" [(value)]="textoY"></td>
+                    </tr>
+                    <tr>
+                        <td><input id="B" size="1" [(value)]="textoB"></td>
+                        <td><input id="L" size="1" [(value)]="textoL"></td>
+                    </tr>
+                </table>
+            </div>
+        </th>
     </tr>
     <tr>
-        <td><button color='primary' mat-raised-button (click) = 'saltPepper(5)' style="margin:10px">ruido sal e pimenta - 05%</button></td>
-        <td><button color='primary' mat-raised-button (click) = 'saltPepper(10)' style="margin:10px">ruido sal e pimenta - 10%</button></td>
-    </tr>
-    <tr>
-        <td><button color='primary' mat-raised-button (click) = 'saltPepper(20)' style="margin:10px">ruido sal e pimenta - 20%</button></td>
-        <td><button color='primary' mat-raised-button (click) = 'saltPepper(40)' style="margin:10px">ruido sal e pimenta - 40%</button></td>
-    </tr>
-    <tr>
-        <td><button color='primary' mat-raised-button (click) = 'saltPepper(60)' style="margin:10px">ruido sal e pimenta - 60%</button></td>
-        <td><button color='primary' mat-raised-button (click) = 'saltPepper(80)' style="margin:10px">ruido sal e pimenta - 80%</button></td>
-    </tr>
-    <tr>
-        <td><button color='primary' mat-raised-button (click) = 'lowPass()' style="margin:10px">passada baixa</button></td>
-    </tr>
-</table>
-<table>
-    <tr>
-        <th>RGB</th>
-        <th>HSL</th>
-    </tr>
-    <tr>
-        <td><input id="R" size="1" [(value)]="textoR"></td>
-        <td><input id="H" size="1" [(value)]="textoH"></td>
-    </tr>
-    <tr>
-        <td><input id="G" size="1" [(value)]="textoG"></td>
-        <td><input id="S" size="1" [(value)]="textoS"></td>
-    </tr>
-    <tr>
-        <td><input id="B" size="1" [(value)]="textoB"></td>
-        <td><input id="L" size="1" [(value)]="textoL"></td>
+        <td>
+            <div>
+                <table>
+                    <tr>
+                        <td><button color='primary' mat-raised-button (click) = 'negativo()' style="margin:10px">inverter cores</button></td>
+                        <td><button color='primary' mat-raised-button (click) = 'equalizarHistograma()' style="margin:10px">equalização de histograma</button></td>
+                    </tr>
+                    <tr>
+                        <td><button color='primary' mat-raised-button (click) = 'lowPass()' style="margin:10px">passada baixa</button></td>
+                        <td><button color='primary' mat-raised-button (click) = 'highPass()' style="margin:10px">passada alta</button></td>
+                    </tr>
+                    <tr>
+                        <td><button color='primary' mat-raised-button (click) = 'saltPepper(5)' style="margin:10px">ruido sal e pimenta - 05%</button></td>
+                        <td><button color='primary' mat-raised-button (click) = 'saltPepper(10)' style="margin:10px">ruido sal e pimenta - 10%</button></td>
+                    </tr>
+                    <tr>
+                        <td><button color='primary' mat-raised-button (click) = 'saltPepper(20)' style="margin:10px">ruido sal e pimenta - 20%</button></td>
+                        <td><button color='primary' mat-raised-button (click) = 'saltPepper(40)' style="margin:10px">ruido sal e pimenta - 40%</button></td>
+                    </tr>
+                    <tr>
+                        <td><button color='primary' mat-raised-button (click) = 'saltPepper(60)' style="margin:10px">ruido sal e pimenta - 60%</button></td>
+                        <td><button color='primary' mat-raised-button (click) = 'saltPepper(80)' style="margin:10px">ruido sal e pimenta - 80%</button></td>
+                    </tr>
+                </table>
+            </div>
+        </td>
+        <td>
+            <p>Este site só consegue ler imagens em escala de cinza do tipo .pgm, e coloridas do tipo .ppm, que forem escritas em ASCII(tipos P2 e P3).</p>
+            <p>As funções de equalização de histograma, e os filtros de passada alta e passada baixa só funcionam em imagens cinza.</p>
+            <p>Se houverem comentarios no arquivo da imagem, as funções de carregamento e exibição de imagem podem funcionar de maneiras inesperadas.</p>
+            <table>
+                <tr>
+                    <th>
+                        <table border=1>
+                            <tr>
+                                <th class="matriz">máscara de </th>
+                                <th class="matriz">filtragem de </th>
+                                <th class="matriz">passada baixa</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                            </tr>
+                        </table>
+                    </th>
+                    <th>
+                        <table border=1>
+                            <tr>
+                                <th class="matriz">máscara de </th>
+                                <th class="matriz">filtragem de </th>
+                                <th class="matriz">passada alta</th>
+                            </tr>
+                            <tr>
+                                <td>-1</td>
+                                <td>-1</td>
+                                <td>-1</td>
+                            </tr>
+                            <tr>
+                                <td>-1</td>
+                                <td>8</td>
+                                <td>-1</td>
+                            </tr>
+                            <tr>
+                                <td>-1</td>
+                                <td>-1</td>
+                                <td>-1</td>
+                            </tr>
+                        </table>
+                    </th>
+                </tr>
+            </table>
+        </td>
     </tr>
 </table>

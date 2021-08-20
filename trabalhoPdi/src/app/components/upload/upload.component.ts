@@ -16,6 +16,8 @@ export class UploadComponent implements OnInit {
   textoH: any = 0;
   textoS: any = 0;
   textoL: any = 0;
+  textoX: any = 0;
+  textoY: any = 0;
 
   constructor(private servico: UploaderService) { }
   
@@ -60,6 +62,11 @@ export class UploadComponent implements OnInit {
       this.drawOnCanvas(this.servico.pic);
     })
   }
+  highPass(){
+    this.servico.highPass().then((resultado)=>{
+      this.drawOnCanvas(this.servico.pic);
+    })
+  }
   getMousePosition(event){
     const ctx = this.myCanvas.nativeElement.getContext('2d');
     let rect = this.myCanvas.nativeElement.getBoundingClientRect();
@@ -74,6 +81,9 @@ export class UploadComponent implements OnInit {
     this.textoH = hsl[0];
     this.textoS = hsl[1];
     this.textoL = hsl[2];
+    console.log(x, y);
+    this.textoX = 'X = '+Math.round(x);
+    this.textoY = 'Y = '+Math.round(y);
   }
   RGBtoHSL(r,g,b){
     r/=255, g/=255, b/=255;
